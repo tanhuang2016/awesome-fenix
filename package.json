@@ -34,7 +34,7 @@
     "markdown-it-sup": "^1.0.0",
     "moment": "^2.24.0",
     "puppeteer": "^1.11.0",
-    "qcloud-cdn-node-sdk": "^1.0.0",
+    "tencentcloud-sdk-nodejs-cdn": "^4.1.200",
     "vuepress": "^1.4.0",
     "vuepress-plugin-comment": "^0.7.3"
   },

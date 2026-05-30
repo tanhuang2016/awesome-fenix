@@ -3,25 +3,21 @@ name: Generate Github-Pages from markdown files
 on:
   push:
     branches: [ master ]
-#  pull_request:
-#    branches: [ master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
-
     steps:
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '18'
+          cache: 'npm'
 
-      - uses: actions/checkout@v2
-
-      - name: Run Export
+      - name: Build
         run: |
           export TZ='Asia/Shanghai'
           npm install
@@ -29,13 +25,14 @@ jobs:
           echo "icyfenix.cn" >> .vuepress/dist/CNAME
 
       - name: Deploy Github-Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: .vuepress/dist
 
-      - name: Refresh CDN
+      - name: Refresh Tencent CDN
         run: npm run deoply:refresh-cdn
         env:
           CDN_ID: ${{ secrets.CDN_ID }}
           CDN_KEY: ${{ secrets.CDN_KEY }}
+        continue-on-error: true
