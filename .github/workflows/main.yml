@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '16'
           cache: 'npm'
 
       - name: Build
@@ -30,8 +30,16 @@ jobs:
           branch: gh-pages
           folder: .vuepress/dist
 
+      - name: Setup Node.js for CDN SDK
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install CDN SDK
+        run: npm install tencentcloud-sdk-nodejs-cdn
+
       - name: Refresh Tencent CDN
-        run: npm run deoply:refresh-cdn
+        run: node .vuepress/qcloud.cdn.refresh.js
         env:
           CDN_ID: ${{ secrets.CDN_ID }}
           CDN_KEY: ${{ secrets.CDN_KEY }}
